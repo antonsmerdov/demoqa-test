@@ -10,7 +10,7 @@ public class TextBoxTest {
     @BeforeAll
     static void beforeAll() {
         Configuration.baseUrl = "https://demoqa.com";
-        Configuration.browserSize = "1920x1080";
+        Configuration.browserSize = "1620x1080";
     }
 
 
@@ -23,8 +23,8 @@ public class TextBoxTest {
         $("#currentAddress").setValue("some address 1");
         $("#permanentAddress").setValue("other address 2");
         $("#submit").click();
-
-
+        $("#output").shouldHave(text("Alex"), text("alex@yandex.ru"),
+                text("some address 1"), text("other address 2"));
 
 
     }
