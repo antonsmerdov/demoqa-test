@@ -2,6 +2,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import pages.RegistrationPage;
 
 import java.io.File;
 
@@ -18,8 +19,10 @@ public class HomeWork {
     @Test
     void test() {
         open("https://demoqa.com/automation-practice-form");
-        $("#firstName").setValue("Jon");
-        $("#lastName").setValue("Jonson");
+        new RegistrationPage().setFirstName("Jon");
+        new RegistrationPage().setLastName("Jonson");
+//        $("#firstName").setValue("Jon");
+//        $("#lastName").setValue("Jonson");
         $("#userEmail").setValue("test@yandex.ru");
         $(byText("Male")).click();
         $("#userNumber").setValue("89991344444");
@@ -38,6 +41,7 @@ public class HomeWork {
         $("#city").$(byText("Noida")).click();
         $("#city").click();
         $("#submit").click();
-        $(".table-responsive").shouldHave(text("Jon"));
+        new RegistrationPage().checkForm("Student Name","Jon Jonson");
+
     }
 }
