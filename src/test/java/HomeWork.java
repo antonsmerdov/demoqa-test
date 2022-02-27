@@ -1,47 +1,40 @@
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pages.RegistrationPage;
 
-import java.io.File;
-
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
 
 public class HomeWork {
+
+    RegistrationPage RegistrationPage = new RegistrationPage();
+
     @BeforeAll
     static void beforeAll() {
-        Configuration.browserSize = "1620x1200";
+        Configuration.baseUrl = "https://demoqa.com";
+        Configuration.browserSize = "1920x1080";
     }
 
     @Test
     void test() {
-        open("https://demoqa.com/automation-practice-form");
-        new RegistrationPage().setFirstName("Jon");
-        new RegistrationPage().setLastName("Jonson");
-//        $("#firstName").setValue("Jon");
-//        $("#lastName").setValue("Jonson");
-        $("#userEmail").setValue("test@yandex.ru");
-        $(byText("Male")).click();
-        $("#userNumber").setValue("89991344444");
-        $("#dateOfBirthInput").click();
-        $(".react-datepicker__month-select").selectOptionContainingText("March");
-        $(".react-datepicker__year-select").selectOptionContainingText("1900");
-        $(byText("30")).click();
-        $(byText("Reading")).click();
-        $("#uploadPicture").uploadFile(new File("/Users/anton/workspace/www.jpg"));
-        $("#currentAddress").setValue("Moscow street");
-        $("#subjectsInput").setValue("en").pressEnter().setValue("ma").pressEnter();
-        sleep(5000);
+        RegistrationPage.openPage();
+        RegistrationPage.setFirstName("Jon");
+        RegistrationPage.setLastName("Jonson");
+        RegistrationPage.setUserEmail("test@yandex.ru");
+        RegistrationPage.setRadioButtonGender();
+        RegistrationPage.setUserNumber("89991344444");
+        RegistrationPage.setBirthDate("30", "March", "1900");
+        RegistrationPage.setCheckboxHobbies();
+        RegistrationPage.setUploadPicture("/Users/anton/workspace/www.jpg");
+        RegistrationPage.setCurrentAddress("Moscow street");
+        RegistrationPage.setSubjectsInput("en", "ma");
         $("#state").scrollTo().click();
-        $("#state").$(byText("NCR")).click();
+        RegistrationPage.setState("NCR");
         $("#city").click();
-        $("#city").$(byText("Noida")).click();
+        RegistrationPage.setCity("Noida");
         $("#city").click();
         $("#submit").click();
-        new RegistrationPage().checkForm("Student Name","Jon Jonson");
+        RegistrationPage.checkForm("Student Name", "Jon Jonson");
 
     }
 }
