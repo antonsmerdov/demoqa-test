@@ -83,7 +83,7 @@ public class RegistrationPage {
     public void setCity(String city) {
         userCity.$(byText(city)).click();
     }
-    
+
     public void checkForm(String fieldName, String value) {
         resultTable.$(byText(fieldName))
                 .parent().shouldHave(text(value));
