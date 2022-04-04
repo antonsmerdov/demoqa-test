@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pages.components.WebSteps;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -51,30 +50,29 @@ public class CapustaSpace {
             $(".message-wrapper").shouldBe(visible);
         });
     }
-    @DisplayName("Загрузка оферты на русском языке")
+    @DisplayName("Проверка оферты на русском языке")
     @Test
     void checkDownloadThreeOfferInRussia() throws Exception {
-        WebSteps steps = new WebSteps();
+       WebSteps steps = new WebSteps();
         step("открываем счет ",() -> {
             open("https://get.stage.capusta.space/bill/abd387f8-5556");
         });
-        steps.checkDownloadOffer();
-        steps.checkDownloadPrivacyPolicy();
-
+        steps.checkDownloadOfferPdf();
+        steps.checkDownloadPrivacyPolicyPdf();
     }
-    @DisplayName("Загрузка оферты на английском языке")
-    @Test
-    void checkDownloadThreeOfferInEnglish() throws Exception {
-        WebSteps steps = new WebSteps();
-        step("открываем счет ",() -> {
-            open("https://get.stage.capusta.space/bill/abd387f8-5556");
-        });
-        steps.setEnglishLanguage();
-        sleep(5000);
-        steps.checkDownloadOffer();
-        steps.checkDownloadPrivacyPolicy();
+//    @DisplayName("Загрузка оферты на английском языке")
+//    @Test
+//    void checkDownloadThreeOfferInEnglish() throws Exception {
+//        WebSteps steps = new WebSteps();
+//        step("открываем счет ",() -> {
+//            open("https://get.stage.capusta.space/bill/abd387f8-5556");
+//        });
+//        steps.setEnglishLanguage();
+//        sleep(5000);
+//        steps.checkDownloadOffer();
+//        steps.checkDownloadPrivacyPolicy();
 
-    }
+//    }
 
 
 }
