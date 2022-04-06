@@ -50,6 +50,7 @@ public class CapustaSpace {
             $(".message-wrapper").shouldBe(visible);
         });
     }
+    @Disabled
     @DisplayName("Проверка оферты на русском языке")
     @Test
     void checkDownloadThreeOfferInRussia() throws Exception {
@@ -60,19 +61,19 @@ public class CapustaSpace {
         steps.checkDownloadOfferPdf();
         steps.checkDownloadPrivacyPolicyPdf();
     }
-//    @DisplayName("Загрузка оферты на английском языке")
-//    @Test
-//    void checkDownloadThreeOfferInEnglish() throws Exception {
-//        WebSteps steps = new WebSteps();
-//        step("открываем счет ",() -> {
-//            open("https://get.stage.capusta.space/bill/abd387f8-5556");
-//        });
-//        steps.setEnglishLanguage();
-//        sleep(5000);
+    @DisplayName("Загрузка оферты на английском языке")
+    @Test
+    void checkDownloadThreeOfferInEnglish() throws Exception {
+        WebSteps steps = new WebSteps();
+        step("открываем счет ",() -> {
+            open("https://get.stage.capusta.space/bill/abd387f8-5556");
+        });
+        steps.selectEnglishLanguage();
+        sleep(5000);
 //        steps.checkDownloadOffer();
 //        steps.checkDownloadPrivacyPolicy();
 
-//    }
+    }
 
 
 }
