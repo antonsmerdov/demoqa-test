@@ -2,14 +2,15 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.UUID;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 import static io.qameta.allure.Allure.step;
 
@@ -21,59 +22,74 @@ public class CapustaSpace {
         SelenideLogger.addListener("allure", new AllureSelenide());
         Configuration.browserSize = "1620x1080";
     }
+//System.currentTimeMillis()
 
-    private String getDate() {
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
-        return df.format(new Date());
-    }
-    @Disabled("без создания нового пользователя")
+
+    //    @Disabled("без создания нового пользователя")
     @Test
     @DisplayName("регистрация нового пользователя")
-    void registration() {
-        step("переходим на capusta.space " , () -> {
+    void registration() throws InterruptedException {
+        WebSteps steps = new WebSteps();
+        step("Переход на страницу регистрации capusta.space ", () -> {
             open("https://stage.capusta.space/registration");
             $(".Registration_form_29bPF").shouldBe(visible);
         });
-        step("указываем email", () -> {
-            $("#input-email").setValue(System.currentTimeMillis()+"@capusta.space");
-            $(".button").click();
+        step("Ввод email", () -> {
+            $(".BaseInput_input_3wdsv").setValue(getUniqueMail());
+            $("button").click();
         });
-        step("указываем адрес проекта", () -> {
+        step("Ввод адреса проекта", () -> {
             $("#input-link").setValue("test.ru");
-            $(".button").click();
+            $("button").click();
         });
-        step("выбираем валюту проекта", () -> {
+        step("Выбор валюты проекта", () -> {
             $(".OptionPanel_container_nUU0h").click();
         });
-        step("регистрируем мерчанта", () -> {
+        step("Регистрация мерчанта", () -> {
             $(".BaseButton_button_2Jv2Z").click();
-            $(".message-wrapper").shouldBe(visible);
+            $(".message-wrapper").shouldBe(visible)
+                    .shouldHave(text("Подтверди, что это ты"));
         });
+       steps.mailLogin();
+        step("Переход с письма в кабинет", () -> {
+            $(".ReactVirtualized__Grid__innerScrollContainer")
+                    .$(withText("Подтверждение регистрации"))
+                    .click();
+            $(byText("Подтвердить")).click();
+            sleep(11000);
+            switchTo().window(0);
+            switchTo().window(1);
+        });
+        steps.checkOpenCabinet();
     }
-    @Disabled
-    @DisplayName("Проверка оферты на русском языке")
+
+    @DisplayName("Проверка трех оферт на русском языке")
     @Test
     void checkDownloadThreeOfferInRussia() throws Exception {
-       WebSteps steps = new WebSteps();
-        step("открываем счет ",() -> {
-            open("https://get.stage.capusta.space/bill/abd387f8-5556");
-        });
+        WebSteps steps = new WebSteps();
+        steps.openMultiBill();
         steps.checkDownloadOfferPdf();
         steps.checkDownloadPrivacyPolicyPdf();
+        steps.checkDownloadUserAgreementPdf();
+
     }
-    @DisplayName("Загрузка оферты на английском языке")
+
+    @DisplayName("Проверка трех оферты на английском языке")
     @Test
     void checkDownloadThreeOfferInEnglish() throws Exception {
         WebSteps steps = new WebSteps();
-        step("открываем счет ",() -> {
-            open("https://get.stage.capusta.space/bill/abd387f8-5556");
-        });
+        steps.openBill();
         steps.selectEnglishLanguage();
-        sleep(5000);
-//        steps.checkDownloadOffer();
-//        steps.checkDownloadPrivacyPolicy();
+        steps.checkDownloadOfferPdf();
+        steps.checkDownloadPrivacyPolicyPdf();
+        steps.checkDownloadUserAgreementPdf();
+
 
     }
 
+
+    private String getUniqueMail() {
+        return "capusta.space+" + UUID.randomUUID().toString().split("-")[0] + "@bk.ru";
+    }
 
 }
